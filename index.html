@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Luxury Dark Gallery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap');
+
+        :root {
+            --bg-primary: #0a0a0a;
+            --bg-secondary: #141414;
+            --bg-tertiary: #1a1a1a;
+            --accent-gold: #d4af37;
+            --accent-gold-light: #f4d03f;
+            --accent-gold-dark: #b8941f;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --border-subtle: rgba(255, 255, 255, 0.1);
+            --shadow-gold: rgba(212, 175, 55, 0.3);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 80%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(212, 175, 55, 0.03) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(255, 255, 255, 0.01) 0%, transparent 30%);
+            animation: bgRotate 30s linear infinite;
+        }
+
+        @keyframes bgRotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Noise Texture Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.03;
+            z-index: -1;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* Header Section */
+        header {
+            position: relative;
+            padding: 80px 20px 60px;
+            text-align: center;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .logo-icon {
+            font-size: 3rem;
+            color: var(--accent-gold);
+            margin-bottom: 20px;
+            animation: float 6s ease-in-out infinite;
+            filter: drop-shadow(0 0 20px var(--shadow-gold));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 15px;
+            background: linear-gradient(135deg, #fff 0%, var(--accent-gold) 50%, #fff 100%);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shine 8s linear infinite;
+        }
+
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 300;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            margin-bottom: 50px;
+        }
+
+        /* Filter Buttons - Premium Style */
+        .filter-container {
+            position: relative;
+            display: inline-block;
+            padding: 5px;
+            background: var(--bg-secondary);
+            border-radius: 50px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .filter-buttons {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            position: relative;
+            padding: 14px 32px;
+            border: none;
+            background: transparent;
+            color: var(--text-secondary);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent-gold-dark), var(--accent-gold));
+            border-radius: 50px;
+            transform: scale(0);
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: -1;
+        }
+
+        .filter-btn:hover {
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .filter-btn.active {
+            color: var(--bg-primary);
+            font-weight: 600;
+        }
+
+        .filter-btn.active::before {
+            transform: scale(1);
+        }
+
+        .filter-btn .count {
+            display: inline-block;
+            margin-left: 6px;
+            font-size: 0.75rem;
+            opacity: 0.7;
+            transition: all 0.3s;
+        }
+
+        .filter-btn.active .count {
+            color: var(--bg-primary);
+            opacity: 0.8;
+        }
+
+        /* Gallery Grid */
+        .gallery-wrapper {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            perspective: 1000px;
+        }
+
+        @media (max-width: 768px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+                gap: 20px;
+            }
+        }
+
+        /* Gallery Item - Premium Card */
+        .gallery-item {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            background: var(--bg-secondary);
+            cursor: pointer;
+            transform-style: preserve-3d;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0;
+            transform: translateY(60px) rotateX(10deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .gallery-item.visible {
+            opacity: 1;
+            transform: translateY(0) rotateX(0);
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.6),
+                        0 0 40px rgba(212, 175, 55, 0.1);
+            z-index: 10;
+        }
+
+        .gallery-item.hidden {
+            display: none;
+        }
+
+        .gallery-item.removing {
+            animation: itemRemove 0.5s forwards;
+        }
+
+        @keyframes itemRemove {
+            to {
+                opacity: 0;
+                transform: scale(0.8) rotateX(10deg);
+                margin-bottom: -100%;
+            }
+        }
+
+        .image-container {
+            position: relative;
+            width: 100%;
+            height: 450px;
+            overflow: hidden;
+        }
+
+        .gallery-item.tall .image-container {
+            height: 600px;
+        }
+
+        .gallery-item.wide .image-container {
+            height: 350px;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(0.9) contrast(1.1);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.15);
+            filter: brightness(1.1) contrast(1.2);
+        }
+
+        /* Overlay Gradient */
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, 
+                rgba(0, 0, 0, 0.95) 0%, 
+                rgba(0, 0, 0, 0.5) 30%, 
+                transparent 60%);
+            opacity: 0.6;
+            transition: opacity 0.4s ease;
+        }
+
+        .gallery-item:hover .image-overlay {
+            opacity: 0.9;
+        }
+
+        /* Content Overlay */
+        .content-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 30px;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .gallery-item:hover .content-overlay {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .category-label {
+            display: inline-block;
+            padding: 6px 16px;
+            background: rgba(212, 175, 55, 0.2);
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-size: 0.75rem;
+            font-weight: 600;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            border-radius: 20px;
+            margin-bottom: 12px;
+            backdrop-filter: blur(10px);
+            transform: translateX(-20px);
+            opacity: 0;
+            transition: all 0.4s ease 0.1s;
+        }
+
+        .gallery-item:hover .category-label {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .image-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: white;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease 0.15s;
+        }
+
+        .gallery-item:hover .image-title {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        .image-desc {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            transform: translateY(20px);
+            opacity: 0;
+            transition: all 0.4s ease 0.2s;
+        }
+
+        .gallery-item:hover .image-desc {
+            transform: translateY(0);
+            opacity: 1;
+        }
+
+        /* View Button */
+        .view-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0);
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: var(--accent-gold);
+            border: none;
+            color: var(--bg-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.4);
+            z-index: 10;
+        }
+
+        .gallery-item:hover .view-btn {
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        .view-btn:hover {
+            transform: translate(-50%, -50%) scale(1.1) !important;
+            background: var(--accent-gold-light);
+            box-shadow: 0 15px 40px rgba(212, 175, 55, 0.6);
+        }
+
+        /* Shine Effect */
+        .shine-effect {
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transform: skewX(-25deg);
+            transition: left 0.7s;
+            pointer-events: none;
+        }
+
+        .gallery-item:hover .shine-effect {
+            left: 150%;
+        }
+
+        /* Lightbox - Cinematic */
+        .lightbox {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.98);
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(20px);
+        }
+
+        .lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .lightbox-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 90vh;
+            transform: scale(0.8) translateY(50px);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .lightbox.active .lightbox-content {
+            transform: scale(1) translateY(0);
+            opacity: 1;
+        }
+
+        .lightbox-image-wrapper {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 50px 100px rgba(0, 0, 0, 0.8),
+                        0 0 60px rgba(212, 175, 55, 0.1);
+        }
+
+        .lightbox-img {
+            max-width: 85vw;
+            max-height: 80vh;
+            object-fit: contain;
+            display: block;
+        }
+
+        .lightbox-info {
+            position: absolute;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            text-align: center;
+            color: white;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.5s ease 0.3s;
+        }
+
+        .lightbox.active .lightbox-info {
+            opacity: 1;
+        }
+
+        .lightbox-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.5);
+        }
+
+        .lightbox-meta {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .lightbox-meta span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .lightbox-meta i {
+            color: var(--accent-gold);
+        }
+
+        /* Navigation */
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .lightbox-nav:hover {
+            background: var(--accent-gold);
+            border-color: var(--accent-gold);
+            color: var(--bg-primary);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .lightbox-prev { left: 40px; }
+        .lightbox-next { right: 40px; }
+
+        .lightbox-close {
+            position: absolute;
+            top: 40px;
+            right: 40px;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-subtle);
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+        }
+
+        .lightbox-close:hover {
+            background: rgba(255, 59, 48, 0.8);
+            border-color: transparent;
+            transform: rotate(90deg);
+        }
+
+        .lightbox-counter {
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            font-family: 'Inter', sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            letter-spacing: 0.1em;
+        }
+
+        .lightbox-counter span {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+
+        /* Loading Animation */
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--bg-primary);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.5s ease, visibility 0.5s;
+        }
+
+        .loader.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .loader-content {
+            text-align: center;
+        }
+
+        .loader-spinner {
+            width: 60px;
+            height: 60px;
+            border: 2px solid transparent;
+            border-top-color: var(--accent-gold);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: relative;
+            margin: 0 auto 20px;
+        }
+
+        .loader-spinner::before,
+        .loader-spinner::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid transparent;
+        }
+
+        .loader-spinner::before {
+            top: 5px;
+            left: 5px;
+            right: 5px;
+            bottom: 5px;
+            border-top-color: rgba(212, 175, 55, 0.5);
+            animation: spin 2s linear infinite reverse;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loader-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            color: var(--accent-gold);
+            letter-spacing: 0.2em;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.5; }
+            50% { opacity: 1; }
+        }
+
+        /* Scroll Progress */
+        .scroll-progress {
+            position: fixed;
+            top: 0;
+            left: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-gold), var(--accent-gold-light));
+            z-index: 1000;
+            transition: width 0.1s;
+            box-shadow: 0 0 10px var(--shadow-gold);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .lightbox-nav {
+                display: none;
+            }
+            
+            .lightbox-info {
+                bottom: 20px;
+                padding: 0 20px;
+            }
+            
+            .lightbox-title {
+                font-size: 1.5rem;
+            }
+            
+            .lightbox-close {
+                top: 20px;
+                right: 20px;
+            }
+            
+            .lightbox-prev { left: 20px; }
+            .lightbox-next { right: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div class="loader" id="loader">
+        <div class="loader-content">
+            <div class="loader-spinner"></div>
+            <div class="loader-text">GALLERY</div>
+        </div>
+    </div>
+
+    <!-- Scroll Progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- Background Effects -->
+    <div class="bg-animation"></div>
+    <div class="noise-overlay"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-content">
+            <div class="logo-icon">
+                <i class="fas fa-crown"></i>
+            </div>
+            <h1>LUXE GALLERY</h1>
+            <p class="subtitle">Curated Visual Excellence</p>
+            
+            <div class="filter-container">
+                <div class="filter-buttons" id="filterButtons">
+                    <!-- Generated by JS -->
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Gallery -->
+    <div class="gallery-wrapper">
+        <div class="gallery" id="gallery">
+            <!-- Generated by JS -->
+        </div>
+    </div>
+
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <div class="lightbox-container">
+            <!-- Close Button -->
+            <button class="lightbox-close" onclick="closeLightbox()">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <!-- Counter -->
+            <div class="lightbox-counter">
+                <span id="currentCount">01</span> / <span id="totalCount">12</span>
+            </div>
+            
+            <!-- Previous Button -->
+            <button class="lightbox-nav lightbox-prev" onclick="changeImage(-1)">
+                <i class="fas fa-arrow-left"></i>
+            </button>
+            
+            <!-- Image Content -->
+            <div class="lightbox-content">
+                <div class="lightbox-image-wrapper">
+                    <img src="" alt="" class="lightbox-img" id="lightboxImg">
+                </div>
+                <div class="lightbox-info">
+                    <h2 class="lightbox-title" id="lightboxTitle">Title</h2>
+                    <div class="lightbox-meta">
+                        <span><i class="fas fa-folder"></i> <span id="lightboxCategory">Category</span></span>
+                        <span><i class="fas fa-calendar"></i> <span id="lightboxDate">2024</span></span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Next Button -->
+            <button class="lightbox-nav lightbox-next" onclick="changeImage(1)">
+                <i class="fas fa-arrow-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Premium Gallery Data
+        const galleryData = [
+            {
+                id: 1,
+                src: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&q=80',
+                title: 'Alpine Majesty',
+                desc: 'The first light kisses the snow-capped peaks of the Swiss Alps, revealing nature\'s grandeur in golden hues.',
+                category: 'nature',
+                size: 'tall',
+                date: '2024'
+            },
+            {
+                id: 2,
+                src: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&q=80',
+                title: 'Urban Symphony',
+                desc: 'Manhattan\'s skyline stands as a testament to human ambition, where steel and glass reach for the heavens.',
+                category: 'architecture',
+                size: 'normal',
+                date: '2024'
+            },
+            {
+                id: 3,
+                src: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1531746020798-e6953c6e8e04?w=800&q=80',
+                title: 'Ethereal Beauty',
+                desc: 'A portrait capturing the essence of natural elegance, where light becomes the brush and shadow the canvas.',
+                category: 'people',
+                size: 'normal',
+                date: '2024'
+            },
+            {
+                id: 4,
+                src: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1518770660439-4636190af475?w=800&q=80',
+                title: 'Digital Neural',
+                desc: 'The intricate pathways of modern technology mirror the complex networks of the human mind.',
+                category: 'technology',
+                size: 'wide',
+                date: '2024'
+            },
+            {
+                id: 5,
+                src: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1433086966358-54859d0ed716?w=800&q=80',
+                title: 'Cascading Dreams',
+                desc: 'Hidden within the misty forests of Iceland, a waterfall flows like liquid silk over ancient stone.',
+                category: 'nature',
+                size: 'tall',
+                date: '2024'
+            },
+            {
+                id: 6,
+                src: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80',
+                title: 'Glass Cathedrals',
+                desc: 'Contemporary architecture defies gravity, creating spaces where light dances through crystalline structures.',
+                category: 'architecture',
+                size: 'normal',
+                date: '2024'
+            },
+            {
+                id: 7,
+                src: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=800&q=80',
+                title: 'Timeless Gaze',
+                desc: 'Eyes that hold stories untold, captured in a moment of profound introspection and raw humanity.',
+                category: 'people',
+                size: 'normal',
+                date: '2024'
+            },
+            {
+                id: 8,
+                src: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=800&q=80',
+                title: 'Cyber Realm',
+                desc: 'The digital frontier where code meets consciousness, creating new dimensions of existence.',
+                category: 'technology',
+                size: 'wide',
+                date: '2024'
+            },
+            {
+                id: 9,
+                src: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=800&q=80',
+                title: 'Ocean\'s Whisper',
+                desc: 'The Pacific coast at golden hour, where waves compose eternal symphonies against ancient cliffs.',
+                category: 'nature',
+                size: 'normal',
+                date: '2024'
+            },
+            {
+                id: 10,
+                src: 'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1479839672679-a46483c0e7c8?w=800&q=80',
+                title: 'Heritage Eternal',
+                desc: 'Classical architecture stands as a bridge between epochs, carrying the wisdom of centuries in its stones.',
+                category: 'architecture',
+                size: 'tall',
+                date: '2024'
+            },
+            {
+                id: 11,
+                src: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=800&q=80',
+                title: 'Urban Grace',
+                desc: 'Street fashion meets high art in this candid moment of metropolitan elegance and style.',
+                category: 'people',
+                size: 'normal',
+                date: '2024'
+            },
+            {
+                id: 12,
+                src: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=1200&q=90',
+                thumb: 'https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=800&q=80',
+                title: 'Matrix Awakening',
+                desc: 'The code that powers our world, flowing like digital rain through the fabric of reality.',
+                category: 'technology',
+                size: 'tall',
+                date: '2024'
+            }
+        ];
+
+        let currentImageIndex = 0;
+        let filteredData = [...galleryData];
+        let currentFilter = 'all';
+
+        // Initialize
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                document.getElementById('loader').classList.add('hidden');
+                initGallery();
+                initFilters();
+                observeItems();
+            }, 1500);
+        });
+
+        // Scroll Progress
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('scrollProgress').style.width = scrolled + '%';
+        });
+
+        // Initialize Filters
+        function initFilters() {
+            const categories = ['all', ...new Set(galleryData.map(item => item.category))];
+            const container = document.getElementById('filterButtons');
+            
+            categories.forEach((cat, index) => {
+                const btn = document.createElement('button');
+                btn.className = `filter-btn ${cat === 'all' ? 'active' : ''}`;
+                btn.onclick = () => filterGallery(cat);
+                
+                const count = cat === 'all' ? galleryData.length : 
+                    galleryData.filter(item => item.category === cat).length;
+                
+                btn.innerHTML = `${cat.charAt(0).toUpperCase() + cat.slice(1)} <span class="count">${count}</span>`;
+                container.appendChild(btn);
+            });
+        }
+
+        // Initialize Gallery
+        function initGallery() {
+            const gallery = document.getElementById('gallery');
+            gallery.innerHTML = '';
+            
+            galleryData.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = `gallery-item ${item.category} ${item.size}`;
+                div.dataset.index = index;
+                
+                div.innerHTML = `
+                    <div class="image-container">
+                        <div class="shine-effect"></div>
+                        <img src="${item.thumb}" alt="${item.title}" loading="lazy">
+                        <div class="image-overlay"></div>
+                        <button class="view-btn" onclick="event.stopPropagation(); openLightbox(${index})">
+                            <i class="fas fa-expand"></i>
+                        </button>
+                    </div>
+                    <div class="content-overlay">
+                        <span class="category-label">${item.category}</span>
+                        <h3 class="image-title">${item.title}</h3>
+                        <p class="image-desc">${item.desc}</p>
+                    </div>
+                `;
+                
+                div.onclick = () => openLightbox(index);
+                gallery.appendChild(div);
+            });
+            
+            filteredData = [...galleryData];
+        }
+
+        // Intersection Observer for Animations
+        function observeItems() {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.gallery-item').forEach(item => {
+                observer.observe(item);
+            });
+        }
+
+        // Filter Gallery with Premium Transitions
+        function filterGallery(category) {
+            currentFilter = category;
+            const items = document.querySelectorAll('.gallery-item');
+            const buttons = document.querySelectorAll('.filter-btn');
+            
+            // Update buttons
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.textContent.toLowerCase().includes(category)) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            // Filter with animation
+            items.forEach((item, index) => {
+                const data = galleryData[index];
+                const shouldShow = category === 'all' || data.category === category;
+                
+                if (shouldShow) {
+                    item.classList.remove('hidden');
+                    setTimeout(() => {
+                        item.style.display = 'block';
+                        setTimeout(() => item.classList.add('visible'), 50);
+                    }, 100);
+                } else {
+                    item.classList.remove('visible');
+                    item.classList.add('removing');
+                    setTimeout(() => {
+                        item.classList.add('hidden');
+                        item.classList.remove('removing');
+                    }, 500);
+                }
+            });
+            
+            // Update filtered data
+            setTimeout(() => {
+                filteredData = category === 'all' 
+                    ? [...galleryData] 
+                    : galleryData.filter(item => item.category === category);
+            }, 500);
+        }
+
+        // Open Lightbox
+        function openLightbox(index) {
+            const lightbox = document.getElementById('lightbox');
+            const item = galleryData[index];
+            
+            currentImageIndex = index;
+            updateLightboxContent(item);
+            
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            
+            // Preload adjacent images
+            preloadAdjacent(index);
+        }
+
+        // Close Lightbox
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Update Lightbox Content
+        function updateLightboxContent(item) {
+            const img = document.getElementById('lightboxImg');
+            const wrapper = document.querySelector('.lightbox-image-wrapper');
+            
+            // Fade effect
+            wrapper.style.opacity = '0.5';
+            
+            setTimeout(() => {
+                img.src = item.src;
+                document.getElementById('lightboxTitle').textContent = item.title;
+                document.getElementById('lightboxCategory').textContent = item.category;
+                document.getElementById('currentCount').textContent = String(currentImageIndex + 1).padStart(2, '0');
+                document.getElementById('totalCount').textContent = String(filteredData.length).padStart(2, '0');
+                
+                img.onload = () => {
+                    wrapper.style.opacity = '1';
+                };
+            }, 200);
+        }
+
+        // Next/Prev Image Navigation
+        function changeImage(direction) {
+            currentImageIndex += direction;
+            
+            if (currentImageIndex >= filteredData.length) currentImageIndex = 0;
+            if (currentImageIndex < 0) currentImageIndex = filteredData.length - 1;
+            
+            const item = filteredData[currentImageIndex];
+            updateLightboxContent(item);
+            preloadAdjacent(currentImageIndex);
+        }
+
+        // Preload Adjacent Images
+        function preloadAdjacent(index) {
+            const prev = (index - 1 + filteredData.length) % filteredData.length;
+            const next = (index + 1) % filteredData.length;
+            
+            [prev, next].forEach(i => {
+                const img = new Image();
+                img.src = filteredData[i].src;
+            });
+        }
+
+        // Keyboard Navigation
+        document.addEventListener('keydown', (e) => {
+            if (!document.getElementById('lightbox').classList.contains('active')) return;
+            
+            switch(e.key) {
+                case 'Escape':
+                    closeLightbox();
+                    break;
+                case 'ArrowLeft':
+                    changeImage(-1);
+                    break;
+                case 'ArrowRight':
+                    changeImage(1);
+                    break;
+            }
+        });
+
+        // Close on Background Click
+        document.getElementById('lightbox').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget || e.target.classList.contains('lightbox-container')) {
+                closeLightbox();
+            }
+        });
+
+        // Touch/Swipe Support for Mobile
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.querySelector('.lightbox-container').addEventListener('touchstart', e => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.querySelector('.lightbox-container').addEventListener('touchend', e => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            const diff = touchStartX - touchEndX;
+            
+            if (Math.abs(diff) > swipeThreshold) {
+                if (diff > 0) changeImage(1);
+                else changeImage(-1);
+            }
+        }
+    </script>
+</body>
+</html>
